@@ -1,0 +1,37 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="sequence-merchant-api">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="m" value="Merchant" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="90" width="140" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="api" value="merchant-api" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="260" y="90" width="160" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="core" value="acquirer-core" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="460" y="90" width="160" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="k" value="Kafka (async)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="660" y="90" width="160" height="60" as="geometry"/>
+    </mxCell>
+    <mxCell id="e1" value="POST /v1/payments/authorize" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="m" target="api">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e2" value="POST /payments/authorize" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="api" target="core">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e3" value="(outbox) payment.authorize.requested" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="core" target="k">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e4" value="200/422/400" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="core" target="api">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="e5" value="200/422/400" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="api" target="m">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,31 @@
+<mxfile host="app.diagrams.net">
+  <diagram name="c4-merchant-api">
+    <mxGraphModel dx="1200" dy="800" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1100" pageHeight="850" math="0" shadow="0">
+      <root>
+    <mxCell id="0"/>
+    <mxCell id="1" parent="0"/>
+    <mxCell id="c1" value="Merchant" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="60" y="80" width="180" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="c2" value="merchant-api\n(BFF/Facade)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="280" y="80" width="220" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="c3" value="acquirer-core\n(core + outbox)" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="540" y="80" width="260" height="70" as="geometry"/>
+    </mxCell>
+    <mxCell id="c4" value="Kafka + outros serviços" style="rounded=1;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+      <mxGeometry x="840" y="60" width="260" height="110" as="geometry"/>
+    </mxCell>
+    <mxCell id="ce1" value="HTTP /v1" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="c1" target="c2">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="ce2" value="HTTP /payments" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="c2" target="c3">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+    <mxCell id="ce3" value="Eventos Kafka" style="endArrow=block;html=1;rounded=0;" edge="1" parent="1" source="c3" target="c4">
+      <mxGeometry relative="1" as="geometry"/>
+    </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

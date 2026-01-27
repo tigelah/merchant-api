@@ -1,0 +1,12 @@
+services:
+  merchant-api:
+    image: merchant-api:local
+    build:
+      context: .
+    environment:
+      SERVER_PORT: 8080
+      ACQUIRER_CORE_BASE_URL: ${ACQUIRER_CORE_BASE_URL:-http://acquirer-core:8081}
+    ports: ["8080:8080"]
+networks:
+  default:
+    name: acquiring-net
