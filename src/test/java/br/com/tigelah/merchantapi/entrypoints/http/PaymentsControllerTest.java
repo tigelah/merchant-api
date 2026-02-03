@@ -30,12 +30,52 @@ class PaymentsControllerTest {
 
     @Test
     void authorize_returns_200() throws Exception {
-        var pv = new PaymentView(UUID.randomUUID(),"AUTHORIZED","BRL",100,"1111","SIM", Instant.parse("2030-01-01T00:00:00Z"));
+        var accountId = UUID.randomUUID();
+        var pv = new PaymentView(
+                UUID.randomUUID(),
+                "AUTHORIZED",
+                "BRL",
+                100,
+                "1111",
+                "SIM",
+                Instant.parse("2030-01-01T00:00:00Z"),
+                accountId,
+                "user-1"
+        );
         when(authorize.execute(any(), eq("k1"), eq("c1"))).thenReturn(pv);
 
         mvc.perform(post("/v1/payments/authorize")
                         .header("Idempotency-Key","k1")
                         .header("X-Correlation-Id","c1")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(String.format("""
+                                {
+                                   "merchantId":"m1",
+                                   "orderId":"o1",
+                                   "amountCents":100,
+                                   "currency":"BRL",
+                                   "accountId":"%s",
+                                   "userId":"user-1",
+                                   "card":{
+                                      "pan":"4111111111111111",
+                                      "holderName":"Fulano",
+                                      "expMonth":"01",
+                                      "expYear":"2030",
+                                      "cvv":"123"
+                                   }
+                                 }
+                        """, accountId)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.paymentId").exists())
+                .andExpect(jsonPath("$.status").value("AUTHORIZED"))
+                .andExpect(jsonPath("$.accountId").value(accountId.toString()))
+                .andExpect(jsonPath("$.userId").value("user-1"));
+    }
+
+    @Test
+    void authorize_missing_accountId_returns_400() throws Exception {
+        mvc.perform(post("/v1/payments/authorize")
+                        .header("Idempotency-Key","k1")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("""
                                 {
@@ -47,42 +87,27 @@ class PaymentsControllerTest {
                                       "pan":"4111111111111111",
                                       "holderName":"Fulano",
                                       "expMonth":"01",
-                                      "expYear":2030,
+                                      "expYear":"2030",
                                       "cvv":"123"
                                    }
                                  }
                         """))
-                        .andExpect(status().isOk())
-                        .andExpect(jsonPath("$.paymentId").exists())
-                        .andExpect(jsonPath("$.status").value("AUTHORIZED"));
-    }
-
-    @Test
-    void authorize_invalid_payload_returns_400() throws Exception {
-        mvc.perform(post("/v1/payments/authorize")
-                        .header("Idempotency-Key","k1")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                {
-                  "merchantId": "m1",
-                  "orderId": "o1",
-                  "amountCents": 0,
-                  "currency": "BRL",
-                  "card": {
-                    "pan": "1",
-                    "holderName": "",
-                    "expMonth": 0,
-                    "expYear": 0,
-                    "cvc": ""
-                  }
-                }
-            """))
                 .andExpect(status().isBadRequest());
     }
 
     @Test
     void get_returns_200() throws Exception {
-        var pv = new PaymentView(UUID.randomUUID(),"AUTHORIZED","BRL",100,"1111","SIM", Instant.parse("2030-01-01T00:00:00Z"));
+        var pv = new PaymentView(
+                UUID.randomUUID(),
+                "AUTHORIZED",
+                "BRL",
+                100,
+                "1111",
+                "SIM",
+                Instant.parse("2030-01-01T00:00:00Z"),
+                UUID.randomUUID(),
+                "user-1"
+        );
         when(get.execute(any(), any())).thenReturn(pv);
 
         mvc.perform(get("/v1/payments/" + pv.paymentId()))

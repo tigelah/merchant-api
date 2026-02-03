@@ -10,5 +10,7 @@ public record PaymentView(
         long amountCents,
         String panLast4,
         String authCode,
-        Instant createdAt
+        Instant createdAt,
+        UUID accountId,
+        String userId    
 ) { }

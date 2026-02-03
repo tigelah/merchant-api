@@ -17,7 +17,13 @@ class AuthorizePaymentUseCaseTest {
         var client = mock(AcquirerCoreClient.class);
         var uc = new AuthorizePaymentUseCase(client);
 
-        var cmd = new AcquirerCoreClient.AuthorizeCommand("m1","o1",100,"BRL","4111","JOAO","12","2030","123");
+        var cmd = new AcquirerCoreClient.AuthorizeCommand(
+                "m1","o1",100,"BRL",
+                "4111","JOAO","12","2030","123",
+                UUID.randomUUID(),
+                "user-1"
+        );
+
         assertThrows(IllegalArgumentException.class, () -> uc.execute(cmd, "", "c1"));
     }
 
@@ -26,10 +32,26 @@ class AuthorizePaymentUseCaseTest {
         var client = mock(AcquirerCoreClient.class);
         var uc = new AuthorizePaymentUseCase(client);
 
-        var pv = new PaymentView(UUID.randomUUID(),"AUTHORIZED","BRL",100,"1111","SIM", Instant.now());
+        var pv = new PaymentView(
+                UUID.randomUUID(),
+                "AUTHORIZED",
+                "BRL",
+                100,
+                "1111",
+                "SIM",
+                Instant.now(),
+                UUID.randomUUID(),
+                "user-1"
+        );
         when(client.authorize(any(), anyString(), anyString())).thenReturn(pv);
 
-        var cmd = new AcquirerCoreClient.AuthorizeCommand("m1","o1",100,"BRL","4111","JOAO","12","2030","123");
+        var cmd = new AcquirerCoreClient.AuthorizeCommand(
+                "m1","o1",100,"BRL",
+                "4111","JOAO","12","2030","123",
+                pv.accountId(),
+                pv.userId()
+        );
+
         var out = uc.execute(cmd, "k1", "c1");
 
         assertEquals(pv.paymentId(), out.paymentId());

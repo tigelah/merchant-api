@@ -9,6 +9,17 @@ public interface AcquirerCoreClient {
     PaymentView capture(UUID paymentId, String correlationId);
     PaymentView get(UUID paymentId, String correlationId);
 
-    record AuthorizeCommand(String merchantId, String orderId, long amountCents, String currency,
-                            String pan, String holderName, String expMonth, String expYear, String cvv) {}
+    record AuthorizeCommand(
+            String merchantId,
+            String orderId,
+            long amountCents,
+            String currency,
+            String pan,
+            String holderName,
+            String expMonth,
+            String expYear,
+            String cvv,
+            UUID accountId,
+            String userId
+    ) {}
 }

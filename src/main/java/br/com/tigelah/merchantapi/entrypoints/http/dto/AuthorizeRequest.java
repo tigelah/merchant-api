@@ -3,11 +3,15 @@ package br.com.tigelah.merchantapi.entrypoints.http.dto;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 
+import java.util.UUID;
+
 public record AuthorizeRequest(
         @NotBlank String merchantId,
         @NotBlank String orderId,
         @Positive long amountCents,
         @NotBlank String currency,
+        @NotNull UUID accountId,
+        String userId,
         @Valid Card card
 ) {
     public record Card(
