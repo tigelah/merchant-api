@@ -35,8 +35,8 @@ public class PaymentsController {
         var cmd = new AcquirerCoreClient.AuthorizeCommand(
                 req.merchantId(), req.orderId(), req.amountCents(), req.currency(),
                 req.card().pan(), req.card().holderName(), req.card().expMonth(), req.card().expYear(), req.card().cvv(),
-                req.accountId(),  // NOVO
-                req.userId()      // NOVO
+                req.accountId(), req.userId(),
+                req.installmentsOrDefault()
         );
         return ResponseEntity.ok(authorize.execute(cmd, idempotencyKey, correlationId));
     }

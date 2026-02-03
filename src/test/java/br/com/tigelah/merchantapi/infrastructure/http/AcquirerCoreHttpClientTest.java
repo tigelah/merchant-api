@@ -33,6 +33,7 @@ class AcquirerCoreHttpClientTest {
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.accountId").value(accountId.toString()))
                 .andExpect(jsonPath("$.userId").value("user-1"))
+                .andExpect(jsonPath("$.installments").value(6))
                 .andRespond(withSuccess(
                         "{"
                                 + "\"paymentId\":\"" + pid + "\","
@@ -52,7 +53,8 @@ class AcquirerCoreHttpClientTest {
                 "m1","o1",100,"BRL",
                 "4111","JOAO","12","2030","123",
                 accountId,
-                "user-1"
+                "user-1",
+                6
         );
 
         PaymentView out = client.authorize(cmd, "k1", "c1");
@@ -69,14 +71,17 @@ class AcquirerCoreHttpClientTest {
         var server = MockRestServiceServer.createServer(rest);
         var client = new AcquirerCoreHttpClient(rest, "http://core");
 
+        var accountId = UUID.randomUUID();
+
         server.expect(requestTo("http://core/payments/authorize"))
                 .andRespond(withStatus(org.springframework.http.HttpStatus.UNPROCESSABLE_ENTITY).body("declined"));
 
         var cmd = new AcquirerCoreClient.AuthorizeCommand(
                 "m1","o1",100,"BRL",
                 "4111","JOAO","12","2030","123",
-                UUID.randomUUID(),
-                "user-1"
+                accountId,
+                "user-1",
+                6
         );
 
         var ex = assertThrows(CoreHttpException.class, () -> client.authorize(cmd, "k1", "c1"));

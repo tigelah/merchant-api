@@ -20,6 +20,7 @@ public interface AcquirerCoreClient {
             String expYear,
             String cvv,
             UUID accountId,
-            String userId
+            String userId,
+            Integer installments
     ) {}
 }

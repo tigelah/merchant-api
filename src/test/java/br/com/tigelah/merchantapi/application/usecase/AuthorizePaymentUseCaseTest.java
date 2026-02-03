@@ -21,7 +21,8 @@ class AuthorizePaymentUseCaseTest {
                 "m1","o1",100,"BRL",
                 "4111","JOAO","12","2030","123",
                 UUID.randomUUID(),
-                "user-1"
+                "user-1",
+                6
         );
 
         assertThrows(IllegalArgumentException.class, () -> uc.execute(cmd, "", "c1"));
@@ -41,7 +42,9 @@ class AuthorizePaymentUseCaseTest {
                 "SIM",
                 Instant.now(),
                 UUID.randomUUID(),
+                6,
                 "user-1"
+
         );
         when(client.authorize(any(), anyString(), anyString())).thenReturn(pv);
 
@@ -49,7 +52,8 @@ class AuthorizePaymentUseCaseTest {
                 "m1","o1",100,"BRL",
                 "4111","JOAO","12","2030","123",
                 pv.accountId(),
-                pv.userId()
+                pv.userId(),
+                pv.installments()
         );
 
         var out = uc.execute(cmd, "k1", "c1");

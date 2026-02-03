@@ -11,9 +11,15 @@ public record AuthorizeRequest(
         @Positive long amountCents,
         @NotBlank String currency,
         @NotNull UUID accountId,
+        @Min(1) Integer installments,
         String userId,
         @Valid Card card
 ) {
+
+    public int installmentsOrDefault() {
+        return (installments == null || installments < 1) ? 1 : installments;
+    }
+
     public record Card(
             @NotBlank @Size(min = 12, max = 19) String pan,
             @NotBlank String holderName,

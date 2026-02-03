@@ -40,6 +40,7 @@ class PaymentsControllerTest {
                 "SIM",
                 Instant.parse("2030-01-01T00:00:00Z"),
                 accountId,
+                6,
                 "user-1"
         );
         when(authorize.execute(any(), eq("k1"), eq("c1"))).thenReturn(pv);
@@ -106,6 +107,7 @@ class PaymentsControllerTest {
                 "SIM",
                 Instant.parse("2030-01-01T00:00:00Z"),
                 UUID.randomUUID(),
+                6,
                 "user-1"
         );
         when(get.execute(any(), any())).thenReturn(pv);

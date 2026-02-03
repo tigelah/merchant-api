@@ -12,5 +12,6 @@ public record PaymentView(
         String authCode,
         Instant createdAt,
         UUID accountId,
-        String userId    
+        Integer installments,
+        String userId
 ) { }
